@@ -1,0 +1,19 @@
+@startuml Arch
+
+package FitLogBot as FL {}
+
+class FL.Comunicator {}
+
+class FL.Render {}
+
+class FL.DB {}
+
+package UserInfo as UI {}
+
+class UI.User {}
+
+class UI.FoodEntry {}
+
+class UI.BodyState {}
+
+@enduml

@@ -1,0 +1,13 @@
+﻿---
+IncludeBlocks: Preserve
+IndentPPDirectives: AfterHash
+IndentWidth: '4'
+Language: Cpp
+PointerAlignment: Left
+SortIncludes: 'true'
+SortUsingDeclarations: 'true'
+TabWidth: '4'
+UseTab: Always
+ColumnLimit: 120
+
+...
