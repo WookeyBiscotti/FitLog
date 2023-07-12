@@ -70,7 +70,7 @@ class Db {
 		SQLite::Statement queryUserInfo(_db, fmt::format("SELECT id, name, chatId FROM user_info WHERE id={}", id));
 		queryUserInfo.executeStep();
 		if (!queryUserInfo.hasRow()) {
-			throw std::runtime_error("Can't find user");
+			return nullptr;
 		}
 
 		_cachedUserInfo[id] =

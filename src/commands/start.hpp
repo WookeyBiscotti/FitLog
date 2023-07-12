@@ -1,19 +1,21 @@
 #pragma once
 
+#include "bot.hpp"
 #include "command.hpp"
+#include "render.hpp"
 
-class DB;
+class Db;
 class Bot;
 
 class StartCommand : public Command {
   public:
-	StartCommand(DB& db, Bot& bot) : _db(db), _bot(bot) {}
+	StartCommand(Db& db, Bot& bot) : _db(db), _bot(bot) {}
 
 	static std::string name() { return "start"; }
 
-	void onCommand(UserContext& context, const std::string& command) override;
+	void onCommand(UserContext& context, const std::string& command) override { sendMainMenu(_bot.api(), context); }
 
   private:
-	DB& _db;
+	Db& _db;
 	Bot& _bot;
 };
