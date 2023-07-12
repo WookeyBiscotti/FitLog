@@ -167,6 +167,7 @@ class StatsMenu : public Command {
 			plot.xtics().fontSize(7).interval(0, std::max(1, days / 7), days);
 			plot.xrange(0.0, days);
 			// plot.ytics().fontSize(7).interval(minW, 1, maxW);
+			plot.ytics().fontSize(7);
 			plot.yrange(minW, maxW);
 			plot.legend().hide();
 			plot.grid().show();
