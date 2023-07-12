@@ -104,7 +104,7 @@ class StatsMenu : public Command {
 			plot.palette("paired");
 			plot.xlabel("Дни").fontSize(7);
 			plot.ylabel("Вес").fontSize(7);
-			plot.drawCurveFilled(x, y).above().label("");
+			plot.drawCurve(x, y).label("");
 			plot.xrange(0.0, days);
 			if (maxW != minW) {
 				plot.ytics().fontSize(7).interval(minW, (maxW - minW) / 10.0f, maxW);
