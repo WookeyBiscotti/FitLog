@@ -84,7 +84,7 @@ class StatsMenu : public Command {
 				return;
 			}
 
-			std::sort(samples.begin(), samples.end(), [](const auto& a, const auto& b) { return a.first < b.first; });
+			std::sort(samples.begin(), samples.end(), [](const auto& a, const auto& b) { return a.first > b.first; });
 
 			Vec x(samples.size());
 			Vec y(samples.size());
@@ -104,7 +104,7 @@ class StatsMenu : public Command {
 			plot.palette("paired");
 			plot.xlabel("Дни").fontSize(7);
 			plot.ylabel("Вес").fontSize(7);
-			plot.drawCurveFilled(x, y).label("").above();
+			plot.drawCurveFilled(x, y).above().label("");
 			plot.xrange(0.0, days);
 			if (maxW != minW) {
 				plot.ytics().fontSize(7).interval(minW, (maxW - minW) / 10.0f, maxW);
@@ -113,7 +113,6 @@ class StatsMenu : public Command {
 				plot.ytics().fontSize(7).interval(minW - 1, 1, maxW + 1);
 				plot.yrange(minW - 1, maxW + 1);
 			}
-			plot.yrange(minW, maxW);
 			plot.legend().hide();
 			plot.grid().show();
 
