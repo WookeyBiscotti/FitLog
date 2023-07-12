@@ -116,6 +116,19 @@ class Db {
 		return res;
 	}
 
+	std::vector<std::pair<uint64_t, float>> getFoodEntriesAll(int64_t id, bool isLiquid, uint64_t fromTs,
+															  uint64_t toTs) {
+		SQLite::Statement q(_db, fmt::format("SELECT ts, kcallories FROM food_entry WHERE userId={} AND ts >= "
+											 "{} AND ts <= {} AND isLiquid == {}",
+											 id, fromTs, toTs, isLiquid ? 1 : 0));
+		std::vector<std::pair<uint64_t, float>> res;
+		while (q.executeStep()) {
+			res.emplace_back(std::pair<uint64_t, float>{q.getColumn(0).getInt64(), q.getColumn(1).getDouble()});
+		}
+
+		return res;
+	}
+
   private:
 	std::unordered_map<int64_t, std::shared_ptr<UserInfo>> _cachedUserInfo;
 	SQLite::Database _db;

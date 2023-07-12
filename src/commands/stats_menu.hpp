@@ -132,7 +132,7 @@ class StatsMenu : public Command {
 			using namespace sciplot;
 			auto to = std::time(nullptr);
 			auto from = to - days * 24 * 3600;
-			auto samples = _db.getFoodEntries(context.userInfo->id, "food", false, from, to);
+			auto samples = _db.getFoodEntriesAll(context.userInfo->id, false, from, to);
 
 			if (samples.empty()) {
 				_bot.api().sendMessage(context.userInfo->chatId,
@@ -144,37 +144,15 @@ class StatsMenu : public Command {
 
 			std::sort(samples.begin(), samples.end(), [](const auto& a, const auto& b) { return a.first < b.first; });
 
-			Vec x(samples.size());
+			std::valarray<uint64_t> x(samples.size());
 			Vec y(samples.size());
-			int minW = 1000;
-			int maxW = -1;
 			for (size_t i = 0; i != samples.size(); ++i) {
-				x[i] = (samples[i].first - from) / (24.0f * 3600);
+				x[i] = samples[i].first;
 				y[i] = samples[i].second;
-				if (y[i] > maxW) {
-					maxW = y[i];
-				}
-				if (y[i] < minW) {
-					minW = y[i];
-				}
 			}
-			Plot2D plot;
-			plot.palette("paired");
-			plot.xlabel("Дни").fontSize(7);
-			plot.ylabel("кКалории").fontSize(7);
-			plot.drawImpulses(x, y).label("");
-			plot.xtics().fontSize(7).interval(0, std::max(1, days / 7), days);
-			plot.xrange(0.0, days);
-			// plot.ytics().fontSize(7).interval(minW, 1, maxW);
-			plot.ytics().fontSize(7);
-			plot.yrange(minW, maxW);
-			plot.legend().hide();
-			plot.grid().show();
+			const auto filename = "/tmp/" + std::to_string(context.userInfo->id) + ".png";
 
-			Figure fig = {{plot}};
-			Canvas canvas = {{fig}};
-			auto filename = "/tmp/" + std::to_string(context.userInfo->id) + ".png";
-			canvas.save(filename);
+			savePlotFromSeriesSum(filename, "Дни", "кКалории", x, y);
 
 			_bot.api().sendPhoto(context.userInfo->chatId, TgBot::InputFile::fromFile(filename, "image/png"));
 			sendMainMenu(_bot.api(), context);

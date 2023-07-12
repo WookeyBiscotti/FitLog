@@ -1,8 +1,12 @@
 #include "render.hpp"
 #include "commands/add_body_stats.hpp"
-#include "commands/stats_menu.hpp"
-#include "commands/start.hpp"
 #include "commands/add_food_stats.hpp"
+#include "commands/start.hpp"
+#include "commands/stats_menu.hpp"
+
+#include <date/date.h>
+#include <date/tz.h>
+#include <sciplot/sciplot.hpp>
 
 TgBot::InlineKeyboardButton::Ptr makeButon(const std::string& label, const std::string& key) {
 	TgBot::InlineKeyboardButton::Ptr bt(new TgBot::InlineKeyboardButton);
@@ -197,3 +201,49 @@ void sendAddBodyWeight(const TgBot::Api& api, Command& command, UserContext& use
 // 	api.sendPhoto(userContext.chatId, TgBot::InputFile::fromFile(filename, "image/png"));
 // 	renderMainMenu(userContext);
 // }
+
+void savePlotFromSeriesSum(const std::string& filename, const std::string& xAxis, const std::string& yAxis,
+						   const std::valarray<uint64_t>& ts, const std::valarray<double>& values) {
+	using namespace sciplot;
+	using namespace std::chrono;
+
+	constexpr unsigned int secsInDay = 3600 * 24;
+
+	auto minTs = ts.min();
+	auto maxTS = ts.max();
+
+	uint64_t daysTotal = 1 + (maxTS - minTs) / secsInDay;
+
+	auto zone = date::locate_zone("Europe/Moscow");
+	auto t = date::make_zoned(zone, date::sys_time<seconds>(seconds(static_cast<long>(minTs))));
+	auto startDay = floor<date::days>(t.get_local_time());
+	// auto seconds = floor<date::w>(startDay);
+	auto startTs = seconds(startDay.time_since_epoch());
+
+	std::valarray<double> x = linspace(0, daysTotal, daysTotal);
+	std::valarray<double> y(daysTotal);
+	Strings names(daysTotal);
+
+	for (size_t i = 0; i != values.size(); ++i) {
+		auto idx = (ts[i] - minTs) / secsInDay;
+		y[idx] += values[i];
+	}
+	for (auto i = 0; i != daysTotal; ++i) {
+		names[i] = format(std::locale("ru_RU.utf8"), "%a", (date::year_month_weekday{startDay}.weekday() + date::days(i)));
+	}
+
+	Plot2D plot;
+	plot.palette("paired");
+	plot.xlabel(xAxis).fontSize(7);
+	plot.ylabel(yAxis).fontSize(7);
+	plot.drawBoxes(names, y).label("");
+	plot.xtics().fontSize(7).interval(0, std::max<double>(1, daysTotal / 10.0f), daysTotal);
+	plot.xrange(0.0, daysTotal);
+	plot.ytics().fontSize(7);
+	plot.legend().hide();
+	plot.grid().show();
+
+	Figure fig = {{plot}};
+	Canvas canvas = {{fig}};
+	canvas.save(filename);
+}

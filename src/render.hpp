@@ -4,6 +4,7 @@
 
 #include <tgbot/Api.h>
 
+#include <valarray>
 
 TgBot::InlineKeyboardButton::Ptr makeButon(const std::string& label, const std::string& key);
 
@@ -31,3 +32,6 @@ void renderAddFoodAccept(const TgBot::Api& api, const UserContext& userContext);
 
 void renderBodyStats(const TgBot::Api& api, const UserContext& userContext, const std::string& name, uint64_t days);
 void renderFoodStats(const TgBot::Api& api, const UserContext& userContext, const std::string& name, uint64_t days);
+
+void savePlotFromSeriesSum(const std::string& filename, const std::string& xAxis, const std::string& yAxis,
+						   const std::valarray<uint64_t>& ts, const std::valarray<double>& values);

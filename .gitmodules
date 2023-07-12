@@ -17,3 +17,7 @@
 [submodule "3rdparty/tgbot-cpp"] 
   path = 3rdparty/tgbot-cpp
   url = https://github.com/reo7sp/tgbot-cpp.git
+
+[submodule "3rdparty/date"] 
+  path = 3rdparty/date
+  url = https://github.com/HowardHinnant/date.git
