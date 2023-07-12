@@ -1,0 +1,19 @@
+[submodule "3rdparty/SQLiteCpp"] 
+  path = 3rdparty/SQLiteCpp 
+  url = https://github.com/SRombauts/SQLiteCpp.git
+
+[submodule "3rdparty/fmt"] 
+  path = 3rdparty/fmt
+  url = https://github.com/fmtlib/fmt.git
+
+[submodule "3rdparty/json"] 
+  path = 3rdparty/json
+  url = https://github.com/nlohmann/json.git
+
+[submodule "3rdparty/sciplot"] 
+  path = 3rdparty/sciplot
+  url = https://github.com/sciplot/sciplot.git
+
+[submodule "3rdparty/tgbot-cpp"] 
+  path = 3rdparty/tgbot-cpp
+  url = https://github.com/reo7sp/tgbot-cpp.git
