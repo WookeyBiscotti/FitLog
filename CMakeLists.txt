@@ -20,13 +20,14 @@ file(
 
 add_executable(FitLog ${FIT_LOG_SOURCES})
 
-target_sources(
-  FitLog PUBLIC "${CMAKE_CURRENT_LIST_DIR}/3rdparty/sqlite_a10n/sqlite3.c")
+add_library(Sqlite "${CMAKE_CURRENT_LIST_DIR}/3rdparty/sqlite_a10n/sqlite3.c")
+
+target_link_libraries(Sqlite PUBLIC m)
 
 target_include_directories(
   FitLog PUBLIC "${CMAKE_CURRENT_LIST_DIR}/3rdparty/sqlite_a10n")
 target_include_directories(FitLog PUBLIC "${CMAKE_CURRENT_LIST_DIR}/src")
 
-target_link_libraries(FitLog PUBLIC TgBot SQLiteCpp fmt::fmt sciplot nlohmann_json::nlohmann_json  -lm)
+target_link_libraries(FitLog PUBLIC TgBot Sqlite SQLiteCpp fmt::fmt sciplot nlohmann_json::nlohmann_json )
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
