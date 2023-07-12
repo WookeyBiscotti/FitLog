@@ -27,6 +27,6 @@ target_include_directories(
   FitLog PUBLIC "${CMAKE_CURRENT_LIST_DIR}/3rdparty/sqlite_a10n")
 target_include_directories(FitLog PUBLIC "${CMAKE_CURRENT_LIST_DIR}/src")
 
-target_link_libraries(FitLog PUBLIC TgBot SQLiteCpp fmt::fmt sciplot nlohmann_json::nlohmann_json)
+target_link_libraries(FitLog PUBLIC TgBot SQLiteCpp fmt::fmt sciplot nlohmann_json::nlohmann_json  -lm)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
