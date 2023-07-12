@@ -106,6 +106,7 @@ class StatsMenu : public Command {
 			plot.ylabel("Вес").fontSize(7);
 			plot.drawCurve(x, y).label("");
 			plot.xrange(0.0, days);
+			plot.xtics().fontSize(7);
 			if (maxW != minW) {
 				plot.ytics().fontSize(7).interval(minW, (maxW - minW) / 10.0f, maxW);
 				plot.yrange(minW, maxW);
