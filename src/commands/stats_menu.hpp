@@ -152,6 +152,7 @@ class StatsMenu : public Command {
 				x[i] = samples[i].first;
 				y[i] = samples[i].second;
 			}
+			
 			const auto filename = "/tmp/" + std::to_string(context.userInfo->id) + ".png";
 			savePlotFromSeriesSum(filename, "Дни", "кКалории", x, y);
 
