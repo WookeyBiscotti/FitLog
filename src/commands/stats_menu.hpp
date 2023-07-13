@@ -120,6 +120,7 @@ class StatsMenu : public Command {
 			Figure fig = {{plot}};
 			Canvas canvas = {{fig}};
 			auto filename = "/tmp/" + std::to_string(context.userInfo->id) + ".png";
+			canvas.size(800, 600);
 			canvas.save(filename);
 
 			_bot.api().sendPhoto(context.userInfo->chatId, TgBot::InputFile::fromFile(filename, "image/png"));
@@ -212,6 +213,7 @@ class StatsMenu : public Command {
 			Figure fig = {{plot}};
 			Canvas canvas = {{fig}};
 			auto filename = "/tmp/" + std::to_string(context.userInfo->id) + ".png";
+			canvas.size(800, 600);
 			canvas.save(filename);
 
 			_bot.api().sendPhoto(context.userInfo->chatId, TgBot::InputFile::fromFile(filename, "image/png"));

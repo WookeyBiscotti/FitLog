@@ -245,5 +245,6 @@ void savePlotFromSeriesSum(const std::string& filename, const std::string& xAxis
 
 	Figure fig = {{plot}};
 	Canvas canvas = {{fig}};
+	canvas.size(800, 600);
 	canvas.save(filename);
 }
