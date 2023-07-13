@@ -234,12 +234,12 @@ void savePlotFromSeriesSum(const std::string& filename, const std::string& xAxis
 
 	Plot2D plot;
 	plot.palette("paired");
-	plot.xlabel(xAxis).fontSize(7);
-	plot.ylabel(yAxis).fontSize(7);
+	plot.xlabel(xAxis);
+	plot.ylabel(yAxis);
 	plot.drawBoxes(names, y).fillSolid().fillColor("#226cbf").fillIntensity(0.5).borderShow().labelNone();
-	plot.xtics().fontSize(7).interval(0, std::max<double>(1, daysTotal / 10.0f), daysTotal);
+	plot.xtics().interval(0, std::max<double>(1, daysTotal / 10.0f), daysTotal);
 	plot.xrange(0.0, daysTotal);
-	plot.ytics().fontSize(7);
+	plot.ytics();
 	plot.legend().hide();
 	plot.grid().show();
 

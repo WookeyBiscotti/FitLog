@@ -102,16 +102,16 @@ class StatsMenu : public Command {
 			}
 			Plot2D plot;
 			plot.palette("paired");
-			plot.xlabel("Дни").fontSize(7);
-			plot.ylabel("Вес").fontSize(7);
+			plot.xlabel("Дни");
+			plot.ylabel("Вес");
 			plot.drawCurve(x, y).label("");
 			plot.xrange(0.0, days);
-			plot.xtics().fontSize(7);
+			plot.xtics();
 			if (maxW != minW) {
-				plot.ytics().fontSize(7).interval(minW, (maxW - minW) / 10.0f, maxW);
+				plot.ytics().interval(minW, (maxW - minW) / 10.0f, maxW);
 				plot.yrange(minW, maxW);
 			} else {
-				plot.ytics().fontSize(7).interval(minW - 1, 1, maxW + 1);
+				plot.ytics().interval(minW - 1, 1, maxW + 1);
 				plot.yrange(minW - 1, maxW + 1);
 			}
 			plot.legend().hide();
@@ -157,7 +157,7 @@ class StatsMenu : public Command {
 			savePlotFromSeriesSum(filename, "Дни", "кКалории", x, y);
 
 			_bot.api().sendPhoto(context.userInfo->chatId, TgBot::InputFile::fromFile(filename, "image/png"));
-			
+
 			sendMainMenu(_bot.api(), context);
 		} else if (stage == BICEP_CIRCUMFERENCE) {
 			auto& values = state["values"];
@@ -196,16 +196,16 @@ class StatsMenu : public Command {
 			}
 			Plot2D plot;
 			plot.palette("paired");
-			plot.xlabel("Дни").fontSize(7);
-			plot.ylabel("Охват").fontSize(7);
+			plot.xlabel("Дни");
+			plot.ylabel("Охват");
 			plot.drawCurveFilled(x, y).label("").above();
-			plot.xtics().fontSize(7).interval(0, std::max(1, days / 7), days);
+			plot.xtics().interval(0, std::max(1, days / 7), days);
 			plot.xrange(0.0, days);
 			if (maxW != minW) {
-				plot.ytics().fontSize(7).interval(minW, (maxW - minW) / 10.0f, maxW);
+				plot.ytics().interval(minW, (maxW - minW) / 10.0f, maxW);
 				plot.yrange(minW, maxW);
 			} else {
-				plot.ytics().fontSize(7).interval(minW - 1, 1, maxW + 1);
+				plot.ytics().interval(minW - 1, 1, maxW + 1);
 				plot.yrange(minW - 1, maxW + 1);
 			}
 			plot.legend().hide();
