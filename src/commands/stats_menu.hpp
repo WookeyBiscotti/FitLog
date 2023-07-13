@@ -153,7 +153,6 @@ class StatsMenu : public Command {
 				y[i] = samples[i].second;
 			}
 			const auto filename = "/tmp/" + std::to_string(context.userInfo->id) + ".png";
-
 			savePlotFromSeriesSum(filename, "Дни", "кКалории", x, y);
 
 			_bot.api().sendPhoto(context.userInfo->chatId, TgBot::InputFile::fromFile(filename, "image/png"));
