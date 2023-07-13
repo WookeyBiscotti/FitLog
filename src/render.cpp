@@ -3,6 +3,7 @@
 #include "commands/add_food_stats.hpp"
 #include "commands/start.hpp"
 #include "commands/stats_menu.hpp"
+#include "time_utils.hpp"
 
 #include <date/date.h>
 #include <date/tz.h>
@@ -208,7 +209,7 @@ void savePlotFromSeriesSum(const std::string& filename, const std::string& xAxis
 	using namespace std::chrono;
 
 	constexpr unsigned int secsInDay = 3600 * 24;
-	
+
 	auto minTs = ts.min();
 	auto maxTS = ts.max();
 
@@ -217,7 +218,7 @@ void savePlotFromSeriesSum(const std::string& filename, const std::string& xAxis
 	auto startDay = floor<date::days>(t.get_local_time());
 	auto startTs = seconds(startDay.time_since_epoch()).count();
 
-	uint64_t daysTotal = 1 + (maxTS - startTs) / secsInDay;
+	uint64_t daysTotal = std::max<uint64_t>(2, 1 + (maxTS - startTs) / secsInDay);
 
 	std::valarray<double> x = linspace(0, daysTotal, daysTotal);
 	std::valarray<double> y(daysTotal);
@@ -239,7 +240,8 @@ void savePlotFromSeriesSum(const std::string& filename, const std::string& xAxis
 	plot.drawBoxes(names, y).fillSolid().fillColor("#226cbf").fillIntensity(0.5).borderShow().labelNone();
 	plot.xtics().interval(0, std::max<double>(1, daysTotal / 10.0f), daysTotal);
 	plot.xrange(0.0, daysTotal);
-	plot.ytics();
+	plot.yrange(y.min() * 0.8, y.max() * 1.2);
+
 	plot.legend().hide();
 	plot.grid().show();
 

@@ -5,6 +5,7 @@
 #include "bot.hpp"
 #include "db.hpp"
 #include "render.hpp"
+#include "time_utils.hpp"
 
 #include <sciplot/sciplot.hpp>
 
@@ -134,7 +135,7 @@ class StatsMenu : public Command {
 
 			using namespace sciplot;
 			auto to = std::time(nullptr);
-			auto from = to - days * 24 * 3600;
+			auto from = days == 1 ? currentDayStartTs() : to - days * 24 * 3600;
 			auto samples = _db.getFoodEntriesAll(context.userInfo->id, false, from, to);
 
 			if (samples.empty()) {
