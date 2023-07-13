@@ -157,6 +157,7 @@ class StatsMenu : public Command {
 			savePlotFromSeriesSum(filename, "Дни", "кКалории", x, y);
 
 			_bot.api().sendPhoto(context.userInfo->chatId, TgBot::InputFile::fromFile(filename, "image/png"));
+			
 			sendMainMenu(_bot.api(), context);
 		} else if (stage == BICEP_CIRCUMFERENCE) {
 			auto& values = state["values"];
