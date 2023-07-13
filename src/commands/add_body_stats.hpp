@@ -3,6 +3,7 @@
 #include "command.hpp"
 
 #include "bot.hpp"
+#include "commands/start.hpp"
 #include "render.hpp"
 
 class AddBodyStats : public Command {
@@ -23,6 +24,7 @@ class AddBodyStats : public Command {
 		auto keyboard = std::make_shared<TgBot::InlineKeyboardMarkup>();
 		setButton(keyboard, 0, 0, makeButon("➕⚖️Вес", ADD_WEIGHT));
 		setButton(keyboard, 0, 1, makeButon("➕💪Обхват бицепса", ADD_BICEP_CIRCUMFERENCE));
+		setButton(keyboard, 0, 2, makeButon("⬅️Отмена", "/" + StartCommand::name()));
 
 		context.stack.push_back({this, {}});
 		_bot.api().sendMessage(context.userInfo->chatId, "Что добавить❓", false, 0, keyboard);
@@ -30,12 +32,14 @@ class AddBodyStats : public Command {
 
 	void onQuery(UserContext& context, const std::string& query) override {
 		auto& state = context.stack.back().state;
+		auto keyboard = std::make_shared<TgBot::InlineKeyboardMarkup>();
+		setButton(keyboard, 0, 0, makeButon("⬅️Отмена", "/" + StartCommand::name()));
 		if (query == ADD_WEIGHT) {
-			_bot.api().sendMessage(context.userInfo->chatId, "Введите вес:");
 			state["stage"] = WEIGHT_STAGE;
+			_bot.api().sendMessage(context.userInfo->chatId, "Введите вес:", false, 0, keyboard);
 		} else if (query == ADD_BICEP_CIRCUMFERENCE) {
-			_bot.api().sendMessage(context.userInfo->chatId, "Обхват бицепса:");
 			state["stage"] = BICEP_CIRCUMFERENCE_STAGE;
+			_bot.api().sendMessage(context.userInfo->chatId, "Обхват бицепса:", false, 0, keyboard);
 		}
 	}
 

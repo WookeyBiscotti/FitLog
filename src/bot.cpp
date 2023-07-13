@@ -39,39 +39,6 @@ UserContext& Bot::getOrCreateUserContext(int64_t id, const std::string& name, in
 	}
 }
 
-// if (!msg->from) {
-// 	_bot.getApi().sendMessage(msg->chat->id, fmt::format("Не можем установить отправителя."));
-// }
-// auto user = _db.getUser(msg->from->id);
-
-// if (user->state == UserInfo::NONE) {
-// 	renderMainMenu(*user);
-// } else if (user->state == UserInfo::ADDING_WEIGHT_VALUE) {
-// 	try {
-// 		float value = std::stof(msg->text);
-// 		_db.addBodyValue(user->id, "weight", value);
-// 		renderBodyAddWeightAccept(*user);
-// 	} catch (const std::exception& e) {
-// 		renderBodyAddWeightError(*user);
-// 	}
-// } else if (user->state == UserInfo::ADDING_FOOD_CALLORIES) {
-// 	try {
-// 		float value = std::stof(msg->text);
-// 		_db.addFoodEntry(user->id, "food", value, false);
-// 		renderAddFoodAccept(*user);
-// 	} catch (const std::exception& e) {
-// 		renderAddFoodError(*user);
-// 	}
-// } else if (user->state == UserInfo::ADDING_LIQUID) {
-// 	try {
-// 		float value = std::stof(msg->text);
-// 		_db.addFoodEntry(user->id, "water", value, true);
-// 		renderAddFoodAccept(*user);
-// 	} catch (const std::exception& e) {
-// 		renderAddFoodError(*user);
-// 	}
-// }
-
 void Bot::run() {
 	using namespace TgBot;
 	addOnCommand<StartCommand>();

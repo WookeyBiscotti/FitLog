@@ -13,7 +13,10 @@ class StartCommand : public Command {
 
 	static std::string name() { return "start"; }
 
-	void onCommand(UserContext& context, const std::string& command) override { sendMainMenu(_bot.api(), context); }
+	void onCommand(UserContext& context, const std::string& command) override {
+		context.stack.clear();
+		sendMainMenu(_bot.api(), context);
+	}
 
   private:
 	Db& _db;

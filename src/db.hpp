@@ -87,7 +87,7 @@ class Db {
 	std::vector<std::pair<uint64_t, float>> getBodyValues(int64_t id, const std::string& name, uint64_t fromTs,
 														  uint64_t toTs) {
 		SQLite::Statement q(
-			_db, fmt::format("SELECT ts, value FROM body_value WHERE userId={} AND name='{}' AND ts >= {} AND ts <= {}",
+			_db, fmt::format("SELECT ts, value FROM body_value WHERE userId={} AND name='{}' AND ts >= {} AND ts <= {} ORDER BY ts",
 							 id, name, fromTs, toTs));
 		std::vector<std::pair<uint64_t, float>> res;
 		while (q.executeStep()) {
@@ -106,7 +106,7 @@ class Db {
 														   uint64_t fromTs, uint64_t toTs) {
 		SQLite::Statement q(_db,
 							fmt::format("SELECT ts, kcallories FROM food_entry WHERE userId={} AND name='{}' AND ts >= "
-										"{} AND ts <= {} AND isLiquid == {}",
+										"{} AND ts <= {} AND isLiquid == {} ORDER BY ts",
 										id, name, fromTs, toTs, isLiquid ? 1 : 0));
 		std::vector<std::pair<uint64_t, float>> res;
 		while (q.executeStep()) {

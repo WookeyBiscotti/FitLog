@@ -203,8 +203,8 @@ void sendAddBodyWeight(const TgBot::Api& api, Command& command, UserContext& use
 // 	renderMainMenu(userContext);
 // }
 
-void savePlotFromSeriesSum(const std::string& filename, const std::string& xAxis, const std::string& yAxis,
-						   const std::valarray<uint64_t>& ts, const std::valarray<double>& values) {
+void savePlotFromSeriesSumByDay(const std::string& filename, const std::string& xAxis, const std::string& yAxis,
+								const std::valarray<uint64_t>& ts, const std::valarray<double>& values) {
 	using namespace sciplot;
 	using namespace std::chrono;
 
@@ -241,6 +241,97 @@ void savePlotFromSeriesSum(const std::string& filename, const std::string& xAxis
 	plot.xtics().interval(0, std::max<double>(1, daysTotal / 10.0f), daysTotal);
 	plot.xrange(0.0, daysTotal);
 	plot.yrange(y.min() * 0.8, y.max() * 1.2);
+
+	plot.legend().hide();
+	plot.grid().show();
+
+	Figure fig = {{plot}};
+	Canvas canvas = {{fig}};
+	canvas.size(800, 600);
+	canvas.save(filename);
+}
+
+void savePlotFromSeries(const std::string& filename, const std::string& xAxis, const std::string& yAxis,
+						const std::valarray<uint64_t>& ts, const std::valarray<double>& values) {
+	using namespace sciplot;
+	using namespace std::chrono;
+
+	constexpr unsigned int secsInDay = 3600 * 24;
+	auto minTs = ts.min();
+	auto maxTS = ts.max();
+	const auto minValue = values.min();
+	const auto maxValue = values.max();
+
+	auto zone = date::locate_zone("Europe/Moscow");
+	Strings names(ts.size());
+
+	if ((maxTS - minTs) / secsInDay > 2) {
+		for (auto i = 0; i != ts.size(); ++i) {
+			auto t = date::make_zoned(zone, date::sys_time<seconds>(seconds(ts[i])));
+			names[i] = format(std::locale("ru_RU.utf8"), "%d %h", t.get_local_time());
+		}
+	} else {
+		for (auto i = 0; i != ts.size(); ++i) {
+			auto t = date::make_zoned(zone, date::sys_time<seconds>(seconds(ts[i])));
+			names[i] = format(std::locale("ru_RU.utf8"), "%d %h %H:%M", t.get_local_time());
+		}
+	}
+
+	Plot2D plot;
+	plot.palette("paired");
+	plot.xlabel(xAxis);
+	plot.ylabel(yAxis);
+	plot.drawBoxes(names, values).fillSolid().fillColor("#226cbf").fillIntensity(0.5).borderShow().labelNone();
+	// plot.yrange(minValue - 1, maxValue);
+	plot.yrange(minValue * 0.8, maxValue * 1.2);
+
+	plot.legend().hide();
+	plot.grid().show();
+
+	Figure fig = {{plot}};
+	Canvas canvas = {{fig}};
+	canvas.size(800, 600);
+	canvas.save(filename);
+}
+
+void savePlot(const std::string& filename, const std::string& xAxis, const std::string& yAxis,
+			  const std::valarray<uint64_t>& ts, const std::valarray<double>& values) {
+	using namespace sciplot;
+	using namespace std::chrono;
+
+	constexpr unsigned int secsInDay = 3600 * 24;
+	auto minTs = ts.min();
+	auto maxTS = ts.max();
+	const auto minValue = values.min();
+	const auto maxValue = values.max();
+
+	auto zone = date::locate_zone("Europe/Moscow");
+	Strings names(ts.size());
+
+	if ((maxTS - minTs) / secsInDay > 2) {
+		for (auto i = 0; i != ts.size(); ++i) {
+			auto t = date::make_zoned(zone, date::sys_time<seconds>(seconds(ts[i])));
+			names[i] = format(std::locale("ru_RU.utf8"), "%d %h", t.get_local_time() + date::days(i));
+		}
+	} else {
+		for (auto i = 0; i != ts.size(); ++i) {
+			auto t = date::make_zoned(zone, date::sys_time<seconds>(seconds(ts[i])));
+			names[i] = format(std::locale("ru_RU.utf8"), "%d %h %H:%M", t.get_local_time() + date::days(i));
+		}
+	}
+
+	Plot2D plot;
+	plot.palette("paired");
+	plot.xlabel(xAxis);
+	plot.ylabel(yAxis);
+	plot.drawCurvesFilled(names, values, std::valarray<double>(minValue - 1, ts.size()))
+		.fillSolid()
+		.fillColor("#226cbf")
+		.fillIntensity(0.5)
+		.borderShow()
+		.labelNone();
+	plot.drawCurve(names, values).labelNone().borderLineColor("black");
+	plot.yrange(minValue - 1, maxValue);
 
 	plot.legend().hide();
 	plot.grid().show();

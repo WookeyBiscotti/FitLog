@@ -2,6 +2,7 @@
 
 #include "bot.hpp"
 #include "command.hpp"
+#include "commands/start.hpp"
 #include "db.hpp"
 #include "render.hpp"
 
@@ -16,7 +17,10 @@ class AddFoodStats : public Command {
 
 	void onCommand(UserContext& context, const std::string& command) override {
 		context.stack.push_back({this, {}});
-		_bot.api().sendMessage(context.userInfo->chatId, "➕Введите кКалории:");
+		auto keyboard = std::make_shared<TgBot::InlineKeyboardMarkup>();
+		setButton(keyboard, 0, 0, makeButon("⬅️Отмена", "/" + StartCommand::name()));
+
+		_bot.api().sendMessage(context.userInfo->chatId, "➕Введите кКалории:", false, 0, keyboard);
 	}
 
 	void onNonCommand(UserContext& context, const std::string& nonCommand) override {
@@ -25,7 +29,8 @@ class AddFoodStats : public Command {
 			_db.addFoodEntry(context.userInfo->id, "food", value, false);
 			_bot.api().sendMessage(context.userInfo->chatId, "🆗Значение добавленно");
 		} catch (const std::exception& e) {
-			_bot.api().sendMessage(context.userInfo->chatId, "⚠️Не удалось прочитать калории");
+			_bot.api().sendMessage(context.userInfo->chatId,
+								   "⚠️Не удалось прочитать калории");
 		}
 
 		assert(!context.stack.empty() && context.stack.back().command == this);
