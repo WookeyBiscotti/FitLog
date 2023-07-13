@@ -104,7 +104,7 @@ class StatsMenu : public Command {
 			plot.palette("paired");
 			plot.xlabel("Дни");
 			plot.ylabel("Вес");
-			plot.drawCurveFilled(x, y).labelNone().above();
+			plot.drawCurvesFilled(x, y, y * 0 + minW).labelNone().fillSolid().fillIntensity(0.5);
 			plot.drawCurve(x, y).labelNone().borderLineColor("black");
 			plot.xrange(0.0, days);
 			plot.xtics();
@@ -153,7 +153,7 @@ class StatsMenu : public Command {
 				x[i] = samples[i].first;
 				y[i] = samples[i].second;
 			}
-			
+
 			const auto filename = "/tmp/" + std::to_string(context.userInfo->id) + ".png";
 			savePlotFromSeriesSum(filename, "Дни", "кКалории", x, y);
 
