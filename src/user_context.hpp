@@ -16,10 +16,5 @@ struct UserContext {
 		Command* command;
 		nlohmann::json state;
 	};
-
 	std::vector<StackEntry> stack;
-
-	enum State { NONE, ADDING_WEIGHT_VALUE, ADDING_FOOD_CALLORIES, ADDING_LIQUID } state = NONE;
-
-	nlohmann::json callbackData;
 };

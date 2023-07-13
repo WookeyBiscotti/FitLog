@@ -88,8 +88,8 @@ class StatsMenu : public Command {
 
 			Vec x(samples.size());
 			Vec y(samples.size());
-			int minW = 1000;
-			int maxW = -1;
+			double minW = 1000;
+			double maxW = -1;
 			for (size_t i = 0; i != samples.size(); ++i) {
 				x[i] = (samples[i].first - from) / (24.0f * 3600);
 				y[i] = samples[i].second;
@@ -104,7 +104,8 @@ class StatsMenu : public Command {
 			plot.palette("paired");
 			plot.xlabel("Дни");
 			plot.ylabel("Вес");
-			plot.drawCurve(x, y).label("");
+			plot.drawCurveFilled(x, y).labelNone().above();
+			plot.drawCurve(x, y).labelNone().borderLineColor("black");
 			plot.xrange(0.0, days);
 			plot.xtics();
 			if (maxW != minW) {
