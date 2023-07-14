@@ -243,7 +243,7 @@ void savePlotFromSeriesSumByDay(const std::string& filename, const std::string& 
 	plot.yrange(y.min() * 0.8, y.max() * 1.2);
 
 	plot.legend().hide();
-	plot.grid().show();
+	plot.grid().show().front();
 
 	Figure fig = {{plot}};
 	Canvas canvas = {{fig}};
@@ -286,7 +286,7 @@ void savePlotFromSeries(const std::string& filename, const std::string& xAxis, c
 	plot.yrange(minValue * 0.8, maxValue * 1.2);
 
 	plot.legend().hide();
-	plot.grid().show();
+	plot.grid().show().front();
 
 	Figure fig = {{plot}};
 	Canvas canvas = {{fig}};
@@ -334,7 +334,7 @@ void savePlot(const std::string& filename, const std::string& xAxis, const std::
 	plot.yrange(minValue - 1, maxValue);
 
 	plot.legend().hide();
-	plot.grid().show();
+	plot.grid().show().front();
 
 	Figure fig = {{plot}};
 	Canvas canvas = {{fig}};
