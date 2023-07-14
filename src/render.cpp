@@ -311,12 +311,12 @@ void savePlot(const std::string& filename, const std::string& xAxis, const std::
 	if ((maxTS - minTs) / secsInDay > 2) {
 		for (auto i = 0; i != ts.size(); ++i) {
 			auto t = date::make_zoned(zone, date::sys_time<seconds>(seconds(ts[i])));
-			names[i] = format(std::locale("ru_RU.utf8"), "%d %h", t.get_local_time() + date::days(i));
+			names[i] = format(std::locale("ru_RU.utf8"), "%d %h", t.get_local_time());
 		}
 	} else {
 		for (auto i = 0; i != ts.size(); ++i) {
 			auto t = date::make_zoned(zone, date::sys_time<seconds>(seconds(ts[i])));
-			names[i] = format(std::locale("ru_RU.utf8"), "%a %H:%M", t.get_local_time() + date::days(i));
+			names[i] = format(std::locale("ru_RU.utf8"), "%a %H:%M", t.get_local_time());
 		}
 	}
 
