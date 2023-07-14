@@ -265,15 +265,19 @@ void savePlotFromSeries(const std::string& filename, const std::string& xAxis, c
 	auto zone = date::locate_zone("Europe/Moscow");
 	Strings names(ts.size());
 
+	std::vector<double> tsd(ts.size());
+
 	if ((maxTS - minTs) / secsInDay > 2) {
 		for (auto i = 0; i != ts.size(); ++i) {
 			auto t = date::make_zoned(zone, date::sys_time<seconds>(seconds(ts[i])));
 			names[i] = format(std::locale("ru_RU.utf8"), "%d %h", t.get_local_time());
+			tsd[i] = ts[i];
 		}
 	} else {
 		for (auto i = 0; i != ts.size(); ++i) {
 			auto t = date::make_zoned(zone, date::sys_time<seconds>(seconds(ts[i])));
 			names[i] = format(std::locale("ru_RU.utf8"), "%a %H:%M", t.get_local_time());
+			tsd[i] = ts[i];
 		}
 	}
 
@@ -281,8 +285,9 @@ void savePlotFromSeries(const std::string& filename, const std::string& xAxis, c
 	plot.palette("paired");
 	plot.xlabel(xAxis);
 	plot.ylabel(yAxis);
-	plot.drawBoxes(names, values).fillSolid().fillColor("#226cbf").fillIntensity(0.5).borderShow().labelNone();
-	// plot.yrange(minValue - 1, maxValue);
+	plot.drawBoxes(ts, values).fillSolid().fillColor("#226cbf").fillIntensity(0.5).borderShow().labelNone();
+	plot.xticsMajorBottom().at(tsd, names);
+
 	plot.yrange(minValue * 0.8, maxValue * 1.2);
 
 	plot.legend().hide();
@@ -307,31 +312,33 @@ void savePlot(const std::string& filename, const std::string& xAxis, const std::
 
 	auto zone = date::locate_zone("Europe/Moscow");
 	Strings names(ts.size());
-
+	std::vector<double> tsd(ts.size());
+	std::string strFormat;
 	if ((maxTS - minTs) / secsInDay > 2) {
-		for (auto i = 0; i != ts.size(); ++i) {
-			auto t = date::make_zoned(zone, date::sys_time<seconds>(seconds(ts[i])));
-			names[i] = format(std::locale("ru_RU.utf8"), "%d %h", t.get_local_time());
-		}
+		strFormat = "%d %h";
 	} else {
-		for (auto i = 0; i != ts.size(); ++i) {
-			auto t = date::make_zoned(zone, date::sys_time<seconds>(seconds(ts[i])));
-			names[i] = format(std::locale("ru_RU.utf8"), "%a %H:%M", t.get_local_time());
-		}
+		strFormat = "%a %H:%M";
+	}
+	for (auto i = 0; i != ts.size(); ++i) {
+		auto t = date::make_zoned(zone, date::sys_time<seconds>(seconds(ts[i])));
+		names[i] = format(std::locale("ru_RU.utf8"), strFormat, t.get_local_time());
+		tsd[i] = ts[i];
 	}
 
 	Plot2D plot;
 	plot.palette("paired");
 	plot.xlabel(xAxis);
 	plot.ylabel(yAxis);
-	plot.drawCurvesFilled(names, values, std::valarray<double>(minValue - 1, ts.size()))
+	plot.drawCurvesFilled(tsd, values, std::valarray<double>(minValue - 1, ts.size()))
 		.fillSolid()
 		.fillColor("#226cbf")
 		.fillIntensity(0.5)
 		.borderShow()
 		.labelNone();
-	plot.drawCurve(names, values).labelNone().borderLineColor("black");
+	plot.drawCurve(tsd, values).labelNone().borderLineColor("black");
 	plot.yrange(minValue - 1, maxValue);
+	plot.xticsMajorBottom().at(tsd, names);
+	plot.xrange(minTs, maxTS);
 
 	plot.legend().hide();
 	plot.grid().show().front();
